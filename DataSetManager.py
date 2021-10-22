@@ -1,0 +1,58 @@
+"""
+Library to manage different types of datasets
+
+Open
+List in folder
+Read from database
+"""
+
+import json
+import pandas as pd
+from Lib.Encoders.JSONDefaultHandler import JSONDefaultHandler
+
+class DataSet:
+    def __init__(self):
+        self.__metadata = dict()
+        self.__data = None
+
+    def open_dataset(self, file_name):
+        with open(file_name) as fp:
+            _envelope = json.load(fp)
+
+        self.__data = pd.read_json(_envelope["data"], orient="split")
+        self.__metadata = _envelope["metadata"]
+
+    def set_metadata(self, key, value):
+        """
+        Add or updates values for dataset metadata
+
+        :param key: key to add under metadata key
+        :param value: value to associate the key with. Can be any valid
+                python type: int, float, str, list, dict, etc.
+        :return:
+        """
+        self.__metadata[key] = value
+
+    def copy_metadata(self, metadata):
+        self.__metadata = metadata
+
+    def set_data(self, df):
+        self.__data = df
+
+    def save_dataset(self, file_name):
+        _envelope = dict()
+        _envelope["data"] = self.__data.to_json(orient="split")
+        _envelope["metadata"] = self.__metadata
+        with open(f"{file_name}", "w") as fp:
+            json.dump(_envelope, fp, default=JSONDefaultHandler.myconverter)
+
+    @property
+    def metadata(self, key=None):
+        if key is None:
+            return self.__metadata
+        else:
+            return self.__metadata[key]
+
+    @property
+    def data(self):
+        return self.__data
