@@ -1,19 +1,32 @@
 """
-Library to manage different types of datasets
+Library to package data and metadata required for
+processing in a pipeline.
 
-Open
-List in folder
-Read from database
 """
 
 import json
 import pandas as pd
-from Lib.Encoders.JSONDefaultHandler import JSONDefaultHandler
+from LibTqtk.Encoders.JSONDefaultHandler import JSONDefaultHandler
 
 class DataSet:
     def __init__(self):
         self.__metadata = dict()
         self.__data = None
+
+    # region Properties
+    @property
+    def metadata(self, key=None):
+        if key is None:
+            return self.__metadata
+        else:
+            return self.__metadata[key]
+
+    @property
+    def data(self):
+        return self.__data
+
+    # endregion
+
 
     def open_dataset(self, file_name):
         with open(file_name) as fp:
@@ -46,13 +59,3 @@ class DataSet:
         with open(f"{file_name}", "w") as fp:
             json.dump(_envelope, fp, default=JSONDefaultHandler.myconverter)
 
-    @property
-    def metadata(self, key=None):
-        if key is None:
-            return self.__metadata
-        else:
-            return self.__metadata[key]
-
-    @property
-    def data(self):
-        return self.__data
