@@ -2,11 +2,14 @@
 Library to package data and metadata required for
 processing in a pipeline.
 
+# version 2021.12.23
+# version 2121.12.28
+
 """
 
 import json
 import pandas as pd
-from LibTqtk.Encoders.JSONDefaultHandler import JSONDefaultHandler
+from LibPub.Encoders.JSONDefaultHandler import JSONDefaultHandler
 
 class DataSet:
     def __init__(self):
@@ -32,7 +35,7 @@ class DataSet:
         with open(file_name) as fp:
             _envelope = json.load(fp)
 
-        self.__data = pd.read_json(_envelope["data"], orient="split")
+        # self.__data = pd.read_json(_envelope["data"], orient="split")
         self.__metadata = _envelope["metadata"]
 
     def set_metadata(self, key, value):
@@ -49,12 +52,12 @@ class DataSet:
     def copy_metadata(self, metadata):
         self.__metadata = metadata
 
-    def set_data(self, df):
-        self.__data = df
+    # def set_data(self, df):
+    #     self.__data = df
 
     def save_dataset(self, file_name):
         _envelope = dict()
-        _envelope["data"] = self.__data.to_json(orient="split")
+        # _envelope["data"] = self.__data.to_json(orient="split")
         _envelope["metadata"] = self.__metadata
         with open(f"{file_name}", "w") as fp:
             json.dump(_envelope, fp, default=JSONDefaultHandler.myconverter)
