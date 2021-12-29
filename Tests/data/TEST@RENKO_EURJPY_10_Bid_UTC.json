@@ -1,0 +1,1 @@
+{"metadata": {"mf_columns": ["tick_mean", "tick_stdev", "tick_kurt", "tick_skew", "tick_count", "tick_max", "tick_min"], "instrument": "EURJPY", "representation": "RENKO", "bar_size": "10", "price_type": "Bid", "test_case": 6}}
